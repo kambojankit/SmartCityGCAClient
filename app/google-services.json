@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "768282003506",
+    "firebase_url": "https://smartcitygcaclient.firebaseio.com",
+    "project_id": "smartcitygcaclient",
+    "storage_bucket": "smartcitygcaclient.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768282003506:android:da704c6c36ea8f92",
+        "android_client_info": {
+          "package_name": "androidapp.com.smartcity_gcaclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768282003506-9de53ushfbd7trrtokqs6db316dflsre.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "androidapp.com.smartcity_gcaclient",
+            "certificate_hash": "8d735e2a1b68225f243ab8e4fa846e7748530633"
+          }
+        },
+        {
+          "client_id": "768282003506-tfvc2p44lisq98c8lpv1hr2gptrfi21h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxxlLuVj9gVaAyvQA2qI5nZbrHhYPetxg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768282003506-tfvc2p44lisq98c8lpv1hr2gptrfi21h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
