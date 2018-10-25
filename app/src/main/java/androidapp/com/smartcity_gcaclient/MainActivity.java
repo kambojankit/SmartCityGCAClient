@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                                 // if registered is false then we go for registration otherwise for time slots
                                 Intent intentRegister = new Intent(MainActivity.this,
                                         RegistrationPage.class);
+                                intentRegister.putExtra("email",user.getEmail());
                                 startActivity(intentRegister);
                             } else {
                                 // call for booking activity

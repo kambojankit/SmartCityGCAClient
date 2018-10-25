@@ -37,6 +37,8 @@ public class RegistrationPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_page);
+        Intent intent = getIntent();
+        final String email = intent.getStringExtra("email");
         registerButton = findViewById(R.id.register_button);
         appDatabase = AppDatabase.getDatabaseInstance(RegistrationPage.this);
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +48,7 @@ public class RegistrationPage extends AppCompatActivity {
                 savingUserInfo();
                 Intent intent = new Intent(RegistrationPage.this,
                         BookingActivity.class);
+                intent.putExtra("email", email);
                 startActivity(intent);
             }
         });
