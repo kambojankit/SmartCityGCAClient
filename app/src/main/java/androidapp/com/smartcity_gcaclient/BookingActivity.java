@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidapp.com.smartcity_gcaclient.constants.Constant;
 import androidapp.com.smartcity_gcaclient.data.AppDatabase;
 import androidapp.com.smartcity_gcaclient.pojo.UserProfileInfo;
 
@@ -43,6 +44,7 @@ public class BookingActivity extends AppCompatActivity{
     String serviceURLGet;
     String email;
     Date cDate;
+    private static final String TAG = "BookingActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +80,13 @@ public class BookingActivity extends AppCompatActivity{
 
     private String getBookingToken() {
         if (slotOneButton.isChecked()) {
-            return "TOKEN_1";
+            return Constant.TOKEN_1;
         }
         if (slotTwoButton.isChecked()) {
-            return "TOKEN_2";
+            return Constant.TOKEN_2;
         }
         if (slotThreeButton.isChecked()) {
-            return "TOKEN_3";
+            return Constant.TOKEN_3;
         }
         return null;
     }
@@ -96,16 +98,16 @@ public class BookingActivity extends AppCompatActivity{
                 .getUserProfiles();
         UserProfileInfo userProfileInfo = userProfileInfoList.get(0);
         Map<String, String> params = new HashMap<>();
-        params.put("address",userProfileInfo.getHouseAddress());
-        params.put("userName", userProfileInfo.getName());
-        params.put("city", userProfileInfo.getCity());
-        params.put("mobileNumber", userProfileInfo.getPhoneNumber());
-        params.put("tokenNumber", bookingToken);
-        params.put("zipCode", userProfileInfo.getPinCode());
-        params.put("dateOfRequest", new SimpleDateFormat("yyyyMMdd").format(cDate));
-        params.put("email", email);
-        params.put("state", userProfileInfo.getState());
-        params.put("subRegion", userProfileInfo.getLocality());
+        params.put(Constant.API_ADDRESS,userProfileInfo.getHouseAddress());
+        params.put(Constant.API_USER_NAME, userProfileInfo.getName());
+        params.put(Constant.API_CITY, userProfileInfo.getCity());
+        params.put(Constant.API_MOBILE_NUMBER, userProfileInfo.getPhoneNumber());
+        params.put(Constant.API_TOKEN_NUMBER, bookingToken);
+        params.put(Constant.API_ZIP_CODE, userProfileInfo.getPinCode());
+        params.put(Constant.API_DATE_OF_REQUEST, new SimpleDateFormat("yyyyMMdd").format(cDate));
+        params.put(Constant.API_EMAIL_ID, email);
+        params.put(Constant.API_STATE, userProfileInfo.getState());
+        params.put(Constant.API_SUB_REGION, userProfileInfo.getLocality());
 
 
 
@@ -117,7 +119,7 @@ public class BookingActivity extends AppCompatActivity{
                         try {
                             VolleyLog.v("Response:%n %s", response.toString(4));
                             Toast.makeText(BookingActivity.this, "Slot booked with id"
-                                            + response.getInt("bookingId"), Toast.LENGTH_LONG).show();
+                                            + response.getInt(Constant.API_RESPONSE_BOOKING_ID), Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -126,7 +128,7 @@ public class BookingActivity extends AppCompatActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("Error: ", error.getMessage());
-                Log.d("BookingActivity", error.toString());
+                Log.d(TAG, error.toString());
                 Toast.makeText(BookingActivity.this, "Already Booked slot for the day"
                         , Toast.LENGTH_LONG).show();
                 error.printStackTrace();
@@ -145,7 +147,7 @@ public class BookingActivity extends AppCompatActivity{
                        try {
                            JSONObject jsonObject = response.getJSONObject(0);
                            VolleyLog.v("Response ", jsonObject.toString());
-                           Log.d("BookingActivity", jsonObject.toString());
+                           Log.d(TAG, jsonObject.toString());
                        } catch (JSONException ex) {
                            ex.printStackTrace();
                        }
@@ -154,7 +156,7 @@ public class BookingActivity extends AppCompatActivity{
            @Override
            public void onErrorResponse(VolleyError error) {
                VolleyLog.e("Error: ", error.getMessage());
-               Log.d("BookingActivity", error.toString());
+               Log.d(TAG, error.toString());
                error.printStackTrace();
            }
        });
