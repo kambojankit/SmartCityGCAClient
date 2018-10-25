@@ -38,12 +38,11 @@ public class BookingActivity extends AppCompatActivity{
     RadioButton slotThreeButton;
     Button schedulePickupButton;
     String bookingToken;
-    JSONObject userJsonObject;
     AppDatabase appDatabase;
     String serviceURLPost;
     String serviceURLGet;
     String email;
-    Date cDate = new Date();
+    Date cDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +51,7 @@ public class BookingActivity extends AppCompatActivity{
         setRadioButtons();
         Intent intent = getIntent();
         email = intent.getStringExtra("email");
+        cDate = new Date();
         appDatabase = AppDatabase.getDatabaseInstance(BookingActivity.this);
         serviceURLPost = "http://10.0.2.2:8080/booking/create";
         serviceURLGet =  "http://10.0.2.2:8080/booking/get/history";
@@ -63,7 +63,6 @@ public class BookingActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(), "please select a slot",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    //createJsonObject(bookingToken);
                     sendBookingRequest(bookingToken);
                 }
             }
@@ -93,31 +92,32 @@ public class BookingActivity extends AppCompatActivity{
     private void sendBookingRequest(final String bookingToken) {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        List<UserProfileInfo> userProfileInfoList = appDatabase.getUserProfileInfoDao().getUserProfiles();
+        List<UserProfileInfo> userProfileInfoList = appDatabase.getUserProfileInfoDao()
+                .getUserProfiles();
         UserProfileInfo userProfileInfo = userProfileInfoList.get(0);
         Map<String, String> params = new HashMap<>();
-        // params.put("Content-Type", "application/json");
         params.put("address",userProfileInfo.getHouseAddress());
         params.put("userName", userProfileInfo.getName());
         params.put("city", userProfileInfo.getCity());
-        //params.put("mobileNumber", userProfileInfo.getPhoneNumber());
+        params.put("mobileNumber", userProfileInfo.getPhoneNumber());
         params.put("tokenNumber", bookingToken);
         params.put("zipCode", userProfileInfo.getPinCode());
         params.put("dateOfRequest", new SimpleDateFormat("yyyyMMdd").format(cDate));
         params.put("email", email);
-        params.put("latAndLong", "string");
-        params.put("requestStatus", "string");
-        params.put("state", "Maha");
-        params.put("subRegion", "delhi");
+        params.put("state", userProfileInfo.getState());
+        params.put("subRegion", userProfileInfo.getLocality());
 
 
 
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, serviceURLPost, new JSONObject(params),
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, serviceURLPost,
+                new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             VolleyLog.v("Response:%n %s", response.toString(4));
+                            Toast.makeText(BookingActivity.this, "Slot booked with id"
+                                            + response.getInt("bookingId"), Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -127,6 +127,8 @@ public class BookingActivity extends AppCompatActivity{
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("Error: ", error.getMessage());
                 Log.d("BookingActivity", error.toString());
+                Toast.makeText(BookingActivity.this, "Already Booked slot for the day"
+                        , Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
@@ -136,7 +138,7 @@ public class BookingActivity extends AppCompatActivity{
 
     private void getBookingHistory() {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, serviceURLGet, null,
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET, serviceURLGet,null,
                new Response.Listener<JSONArray>() {
                    @Override
                    public void onResponse(JSONArray response) {
