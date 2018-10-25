@@ -22,6 +22,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.List;
+
+import androidapp.com.smartcity_gcaclient.data.AppDatabase;
+import androidapp.com.smartcity_gcaclient.pojo.UserProfileInfo;
+
 public class MainActivity extends AppCompatActivity {
 
     private SignInButton googleSignInUpButton;
@@ -30,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
 
     private static final int RC_SIGN_IN = 234;
+    AppDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         googleSignInUpButton = findViewById(R.id.google_sign_in_button);
         mFirebaseAuth = FirebaseAuth.getInstance();
+        database = AppDatabase.getDatabaseInstance(MainActivity.this);
         mGoogleSignInOptions =new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -54,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signIn() {
-        //getting the google signin intent
+        //getting the google signIn intent
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 
         //starting the activity for result
@@ -96,14 +103,25 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("MainActivity", "signInWithCredential:success");
                             FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, user.getDisplayName() + " Signed In ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, user.getDisplayName() +
+                                    " Signed In ", Toast.LENGTH_SHORT).show();
                             //TODO : call the activity from here to register or for time slots
+                            if (isRegistered()) {
+                                // if registered is false then we go for registration otherwise for time slots
+                                Intent intentRegister = new Intent(MainActivity.this,
+                                        RegistrationPage.class);
+                                startActivity(intentRegister);
+                            } else {
+                                // call for booking activity
+                                Intent intentBooking = new Intent(MainActivity.this,
+                                        BookingActivity.class);
+                                startActivity(intentBooking);
+                            }
 
-                            Intent intent = new Intent(MainActivity.this, RegistrationPage.class);
-                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("MainActivity", "signInWithCredential:failure", task.getException());
+                            Log.w("MainActivity", "signInWithCredential:failure",
+                                    task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
@@ -111,4 +129,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    /***
+     * to check if user has registered his pickup details or not
+     * @return boolean
+     */
+    private boolean isRegistered() {
+        List<UserProfileInfo> userProfileInfoList = database.getUserProfileInfoDao()
+                .getUserProfiles();
+        boolean userProfileInfo = userProfileInfoList.isEmpty();
+        return userProfileInfo;
+    }
+
 }
