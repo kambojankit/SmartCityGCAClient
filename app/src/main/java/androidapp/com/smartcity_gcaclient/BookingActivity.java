@@ -31,6 +31,7 @@ import java.util.Map;
 import androidapp.com.smartcity_gcaclient.constants.Constant;
 import androidapp.com.smartcity_gcaclient.data.AppDatabase;
 import androidapp.com.smartcity_gcaclient.pojo.UserProfileInfo;
+import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
 public class BookingActivity extends AppCompatActivity{
 
@@ -44,6 +45,7 @@ public class BookingActivity extends AppCompatActivity{
     String serviceURLGet;
     String email;
     Date cDate;
+    FloatingTextButton floatingTextButton;
     private static final String TAG = "BookingActivity";
 
     @Override
@@ -69,6 +71,13 @@ public class BookingActivity extends AppCompatActivity{
                 }
             }
         });
+
+        floatingTextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // calling activity to update the address
+            }
+        });
     }
 
     private void setRadioButtons() {
@@ -76,6 +85,7 @@ public class BookingActivity extends AppCompatActivity{
         slotTwoButton = findViewById(R.id.rb_slot_12to1);
         slotThreeButton = findViewById(R.id.rb_slot_2to3);
         schedulePickupButton = findViewById(R.id.button_pickup_schedule);
+        floatingTextButton = findViewById(R.id.action_button_address);
     }
 
     private String getBookingToken() {
