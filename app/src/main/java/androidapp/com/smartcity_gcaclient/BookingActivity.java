@@ -7,19 +7,10 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidapp.com.smartcity_gcaclient.data.AppDatabase;
 import androidapp.com.smartcity_gcaclient.pojo.UserProfileInfo;
@@ -47,7 +38,8 @@ public class BookingActivity extends AppCompatActivity{
             public void onClick(View v) {
                 bookingToken = getBookingToken();
                 if (bookingToken == null) {
-                    Toast.makeText(getApplicationContext(), "please select a slot", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "please select a slot",
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     //createJsonObject(bookingToken);
                     sendBookingRequest(bookingToken);
@@ -77,7 +69,8 @@ public class BookingActivity extends AppCompatActivity{
     }
 
     private void createJsonObject(String bookingToken) {
-        List<UserProfileInfo> userProfileInfoList = appDatabase.getUserProfileInfoDao().getUserProfiles();
+        List<UserProfileInfo> userProfileInfoList = appDatabase.getUserProfileInfoDao()
+                .getUserProfiles();
         UserProfileInfo userProfileInfo = userProfileInfoList.get(0);
         userJsonObject = new JSONObject();
 
@@ -90,36 +83,6 @@ public class BookingActivity extends AppCompatActivity{
     }
 
     private void sendBookingRequest(final String bookingToken) {
-        List<UserProfileInfo> userProfileInfoList = appDatabase.getUserProfileInfoDao().getUserProfiles();
-        UserProfileInfo userProfileInfo = userProfileInfoList.get(0);
-        Map<String, String> params = new HashMap<>();
-        //params.put("Content-Type", "application/json");
-        params.put("address",userProfileInfo.getHouseAddress());
-        params.put("username", userProfileInfo.getName());
-        params.put("city", userProfileInfo.getCity());
-        params.put("mobileNumber", userProfileInfo.getPhoneNumber());
-        params.put("tokenNumber", bookingToken);
-        params.put("zipCode", userProfileInfo.getPinCode());
-        params.put("dateOfRequest", "20181024");
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest req = new JsonObjectRequest(serviceURL, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            VolleyLog.v("Response:%n %s", response.toString(4));
-                            Toast.makeText(BookingActivity.this, "successfully called" + response, Toast.LENGTH_SHORT)
-                                    .show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
-            }
-        });
-        requestQueue.add(req);
+
     }
 }
