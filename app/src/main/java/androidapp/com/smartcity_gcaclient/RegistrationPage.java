@@ -13,14 +13,6 @@ import androidapp.com.smartcity_gcaclient.pojo.UserProfileInfo;
 
 public class RegistrationPage extends AppCompatActivity {
 
-    private String nameOfUser;
-    private String emailIdOfUser;
-    private String mobileNoOfUser;
-    private String houseAddress;
-    private String localityOfUser;
-    private String cityOfUser;
-    private String stateOfUser;
-    private String pinCodeOfUser;
     private Button registerButton;
     private EditText nameET;
     private EditText emailET;
@@ -30,6 +22,7 @@ public class RegistrationPage extends AppCompatActivity {
     private EditText cityET;
     private EditText stateET;
     private EditText pinCodeET;
+
 
     AppDatabase appDatabase;
 
@@ -56,14 +49,13 @@ public class RegistrationPage extends AppCompatActivity {
 
     private void getUserInfo(){
         nameET = findViewById(R.id.et_user_name);
-        // getting through intent for now
-//        emailET = findViewById(R.id.email);
         mobileNoET = findViewById(R.id.et_mobile_number);
         houseAddET = findViewById(R.id.et_house_address);
         localityET = findViewById(R.id.et_locality);
         cityET = findViewById(R.id.et_city);
         stateET = findViewById(R.id.et_state);
         pinCodeET = findViewById(R.id.et_pin_code);
+
     }
 
     private void savingUserInfo(){

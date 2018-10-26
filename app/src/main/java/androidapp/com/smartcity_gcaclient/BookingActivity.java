@@ -75,7 +75,9 @@ public class BookingActivity extends AppCompatActivity{
         floatingTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // calling activity to update the address
+                Intent editInfoIntent = new Intent(BookingActivity.this,
+                        EditInfoActivity.class);
+                startActivity(editInfoIntent);
             }
         });
     }
@@ -85,7 +87,7 @@ public class BookingActivity extends AppCompatActivity{
         slotTwoButton = findViewById(R.id.rb_slot_12to1);
         slotThreeButton = findViewById(R.id.rb_slot_2to3);
         schedulePickupButton = findViewById(R.id.button_pickup_schedule);
-        floatingTextButton = findViewById(R.id.action_button_address);
+        floatingTextButton = findViewById(R.id.action_button_edit_address);
     }
 
     private String getBookingToken() {
