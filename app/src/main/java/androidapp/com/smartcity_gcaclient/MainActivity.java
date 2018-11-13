@@ -179,6 +179,19 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                            if (isRegistered()) {
+                                // if registered is false then we go for registration otherwise for time slots
+                                Intent intentRegister = new Intent(MainActivity.this,
+                                        RegistrationPage.class);
+                                intentRegister.putExtra("email",user.getEmail());
+                                startActivity(intentRegister);
+                            } else {
+                                // call for booking activity
+                                Intent intentBooking = new Intent(MainActivity.this,
+                                        BookingActivity.class);
+                                startActivity(intentBooking);
+                            }
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
